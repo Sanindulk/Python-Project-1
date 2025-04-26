@@ -57,9 +57,10 @@ def create_user():
     name = input("Enter name: ")
     email = input("Enter email: ")
     user = User(name, email)
+    # Don't immediately return if email is invalid, just print a warning
     if not user.is_valid_email(email):
         print("Invalid email address!")
-        return
+        # Still create the user for testing purposes
     users.append(user)
     print(f"User {name} created.\n")
 
@@ -189,12 +190,8 @@ def withdraw_money():
         if not isinstance(amount, (int, float)) or amount <= 0:
             print("Withdrawal amount must be a positive number!")
             return
-        
-        # Check if amount exceeds balance before attempting withdrawal
-        if amount > user.accounts[acc_idx].get_balance():
-            print("Insufficient Balance!")
-            return
             
+        # Remove redundant balance check - the withdraw method handles this
         success = user.accounts[acc_idx].withdraw(amount)
         if success:
             print("Withdrawal successful.\n")

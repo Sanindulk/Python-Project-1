@@ -4,7 +4,7 @@ from account.transaction import Transaction
 ALLOWED_ACCOUNT_TYPES = {"SAVINGS", "CURRENT", "STUDENT"}
 
 class BankAccount:
-    def __init__(self, name="John", email="john@gmail.com", initial_balance=0, account_type="GENERIC"):
+    def __init__(self, name="John", email="john@gmail.com", initial_balance=0, account_type="SAVINGS"):
         if not isinstance(initial_balance, (int, float)) or initial_balance < 0:
             print("Invalid initial balance!")
             # Set a default valid balance instead of potentially negative
@@ -12,7 +12,12 @@ class BankAccount:
         else:
             self.balance = initial_balance
         self.transactions_history = []
-        self.account_type = account_type
+        # Validate account type if not using a specialized account class
+        if not self.is_valid_account_type(account_type):
+            print(f"Invalid account type. Using SAVINGS instead.")
+            self.account_type = "SAVINGS"
+        else:
+            self.account_type = account_type
         self.name = name
         self.email = email
 
@@ -87,6 +92,8 @@ class CurrentAccount(BankAccount):
         return "Current account"
 
 class StudentAccount(BankAccount):
+    MIN_BALANCE = 100
+    
     def __init__(self, name="John", email="john@gmail.com", initial_balance=0):
         super().__init__(name, email, initial_balance, "STUDENT")
 
@@ -94,8 +101,8 @@ class StudentAccount(BankAccount):
         if not isinstance(amount, (int, float)) or amount <= 0:
             print("Withdrawal amount is invalid!")
             return False
-        if (self.balance - amount) < 100:
-            print("A minimum balance of Rs.100 needed to withdraw from a Students account!")
+        if (self.balance - amount) < self.MIN_BALANCE:
+            print(f"A minimum balance of Rs.{self.MIN_BALANCE} needed to withdraw from a Students account!")
             return False
         self.balance -= amount
         self.transactions_history.append(Transaction(amount, "withdraw"))
