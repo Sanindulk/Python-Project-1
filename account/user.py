@@ -18,8 +18,11 @@ class User:
     def remove_account(self, account):
         return "Account"
 
-    def is_valid_email(self,email):
-        return None
+    def is_valid_email(self, email):
+        # Basic email validation
+        if not email or '@' not in email or '.' not in email.split('@')[1]:
+            return False
+        return True
 
 
     def __str__(self):

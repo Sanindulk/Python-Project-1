@@ -8,7 +8,8 @@ def create_user():
     email = input("Enter email: ")
     user = User(name, email)
     if not user.is_valid_email(email):
-        print("Email is invalid!")
+        print("Invalid email address!")
+        return
     users.append(user)
     print(f"User {name} created.\n")
 
@@ -19,7 +20,7 @@ def list_users():
 def create_account():
     # Check if users list is empty
     if not users:
-        print("No users available. Please create a user first.")
+        print("No users available. Please create a user first")
         return
         
     list_users()
@@ -38,14 +39,14 @@ def create_account():
         amount = float(input("Enter initial deposit: "))
 
         if account_choice == 1:
-            account = SavingsAccount(amount)
+            account = SavingsAccount(users[idx].name, users[idx].email, amount)
         elif account_choice == 2:
-            account = StudentAccount(amount)
+            account = StudentAccount(users[idx].name, users[idx].email, amount)
         elif account_choice == 3:
-            account = CurrentAccount(amount)
+            account = CurrentAccount(users[idx].name, users[idx].email, amount)
         else:
-            print("Invalid choice!")
-            account = BankAccount(amount)
+            print("Invalid account type!")
+            return
 
         users[idx].add_account(account)
         print(f"{account.get_account_type()} added!\n")
