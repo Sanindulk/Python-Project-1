@@ -2,7 +2,7 @@ from account.transaction import Transaction
 from account.user import User
 
 # Define allowed account types
-ALLOWED_ACCOUNT_TYPES = {"SAVINGS", "CURRENT"}
+ALLOWED_ACCOUNT_TYPES = {"SAVINGS", "CURRENT", "STUDENT"}
 
 class BankAccount:
     def __init__(self,name= "John" ,email= "john@gmail.com", initial_balance=0, account_type="GENERIC"):
@@ -27,7 +27,7 @@ class BankAccount:
             return False
         self.balance += amount
         self.transactions_history.append(Transaction(amount, "deposit"))
-        print(f"Deposited ${amount:.2f}. New balance: ${self.balance:.2f}")
+        print(f"Deposited Rs.{amount:.2f}. New balance: Rs.{self.balance:.2f}")
         return True
 
     def withdraw(self, amount):
@@ -39,7 +39,7 @@ class BankAccount:
             return False
         self.balance -= amount  # Fixed: SUBTRACT the withdrawal amount
         self.transactions_history.append(Transaction(amount, "withdraw"))
-        print(f"Withdrew ${amount:.2f}. New balance: ${self.balance:.2f}")
+        print(f"Withdrew Rs.{amount:.2f}. New balance: Rs.{self.balance:.2f}")
         return True
 
     def get_balance(self):
@@ -70,7 +70,7 @@ class SavingsAccount(BankAccount):
             return False
         self.balance -= amount
         self.transactions_history.append(Transaction(amount, "withdraw"))
-        print(f"Withdrew ${amount:.2f}. New balance: ${self.balance:.2f}")
+        print(f"Withdrew Rs.{amount:.2f}. New balance: Rs.{self.balance:.2f}")
         return True
 
     def get_account_type(self):
@@ -97,7 +97,7 @@ class StudentAccount(BankAccount):
             return False
         self.balance -= amount
         self.transactions_history.append(Transaction(amount, "withdraw"))
-        print(f"Withdrew ${amount:.2f}. New balance: ${self.balance:.2f}")
+        print(f"Withdrew Rs.{amount:.2f}. New balance: Rs.{self.balance:.2f}")
         return True
 
     def get_account_type(self):
