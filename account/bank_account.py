@@ -5,7 +5,10 @@ class BankAccount:
     def __init__(self,name= "John" ,email= "john@gmail.com", initial_balance=0):
         if not isinstance(initial_balance , (int, float)) or initial_balance<0:
             print("Invalid initial balance!")
-        self.balance = initial_balance
+            # Set a default valid balance instead of potentially negative
+            self.balance = 0
+        else:
+            self.balance = initial_balance
         self.transactions_history = []
         self.account_type = "Generic"
         self.user = User(name, email)

@@ -82,6 +82,10 @@ def deposit_money():
             return
             
         amount = float(input("Enter amount to deposit: "))
+        # Add numerical boundary check
+        if not isinstance(amount, (int, float)) or amount <= 0:
+            print("Deposit amount must be a positive number!")
+            return
         user.accounts[acc_idx].deposit(amount)
     except ValueError:
         print("Invalid input. Please enter a number.\n")
