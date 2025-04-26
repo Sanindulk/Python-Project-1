@@ -1,3 +1,5 @@
+from email_validator import validate_email, EmailNotValidError
+
 class User:
     def __init__(self, name, email):
         self.name = name
@@ -19,10 +21,12 @@ class User:
         return "Account"
 
     def is_valid_email(self, email):
-        # Basic email validation
-        if not email or '@' not in email or '.' not in email.split('@')[1]:
+        # Advanced email validation using email-validator library
+        try:
+            validate_email(email)
+            return True
+        except EmailNotValidError:
             return False
-        return True
 
 
     def __str__(self):
