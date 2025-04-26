@@ -1,8 +1,11 @@
 from account.transaction import Transaction
 from account.user import User
 
+# Define allowed account types
+ALLOWED_ACCOUNT_TYPES = {"SAVINGS", "CURRENT"}
+
 class BankAccount:
-    def __init__(self,name= "John" ,email= "john@gmail.com", initial_balance=0):
+    def __init__(self,name= "John" ,email= "john@gmail.com", initial_balance=0, account_type="GENERIC"):
         if not isinstance(initial_balance , (int, float)) or initial_balance<0:
             print("Invalid initial balance!")
             # Set a default valid balance instead of potentially negative
@@ -10,8 +13,13 @@ class BankAccount:
         else:
             self.balance = initial_balance
         self.transactions_history = []
-        self.account_type = "Generic"
+        self.account_type = account_type
         self.user = User(name, email)
+
+    @staticmethod
+    def is_valid_account_type(account_type):
+        """Validates that the account type is in the allowed set"""
+        return account_type.upper() in ALLOWED_ACCOUNT_TYPES
 
     def deposit(self, amount):
         if not isinstance(amount , (int, float)) or amount <= 0:
@@ -50,6 +58,9 @@ class BankAccount:
 class SavingsAccount(BankAccount):
     MIN_BALANCE = 100
 
+    def __init__(self, name="John", email="john@gmail.com", initial_balance=0):
+        super().__init__(name, email, initial_balance, "SAVINGS")
+
     def withdraw(self, amount):
         if not isinstance(amount, (int, float)) or amount <= 0:
             print("Withdrawal amount is invalid!")
@@ -66,11 +77,16 @@ class SavingsAccount(BankAccount):
         return "Savings account"
 
 class CurrentAccount(BankAccount):
+    def __init__(self, name="John", email="john@gmail.com", initial_balance=0):
+        super().__init__(name, email, initial_balance, "CURRENT")
 
     def get_account_type(self):
         return "Current account"
 
 class StudentAccount(BankAccount):
+    def __init__(self, name="John", email="john@gmail.com", initial_balance=0):
+        # Student accounts aren't in the allowed types but keeping for compatibility
+        super().__init__(name, email, initial_balance, "STUDENT")
 
     def withdraw(self, amount):
         if not isinstance(amount, (int, float)) or amount <= 0:

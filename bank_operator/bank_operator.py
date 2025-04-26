@@ -1,5 +1,5 @@
 from account.user import User
-from account.bank_account import BankAccount, SavingsAccount, CurrentAccount, StudentAccount
+from account.bank_account import BankAccount, SavingsAccount, CurrentAccount, StudentAccount, ALLOWED_ACCOUNT_TYPES
 
 users = []
 
@@ -32,6 +32,26 @@ def validate_account_selection(user, acc_input):
     except ValueError:
         print("Invalid account selection.\n")
         return False, -1
+
+def validate_account_type(account_choice):
+    """
+    Validate account type choice
+    Returns tuple of (is_valid, account_type_string)
+    """
+    account_types = {
+        1: "SAVINGS",
+        2: "STUDENT",
+        3: "CURRENT"
+    }
+    
+    if account_choice not in account_types:
+        return False, None
+    
+    account_type = account_types[account_choice]
+    if account_type != "STUDENT" and not BankAccount.is_valid_account_type(account_type):
+        return False, None
+        
+    return True, account_type
 
 def create_user():
     name = input("Enter name: ")
@@ -66,7 +86,8 @@ def create_account():
     
     try:
         account_choice = int(input("Enter your choice (1, 2, 3): "))
-        if account_choice not in [1, 2, 3]:
+        valid, account_type = validate_account_type(account_choice)
+        if not valid:
             print("Invalid account type!")
             return
             
