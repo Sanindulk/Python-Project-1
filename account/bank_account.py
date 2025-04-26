@@ -1,12 +1,11 @@
 from account.transaction import Transaction
-from account.user import User
 
 # Define allowed account types
 ALLOWED_ACCOUNT_TYPES = {"SAVINGS", "CURRENT", "STUDENT"}
 
 class BankAccount:
-    def __init__(self,name= "John" ,email= "john@gmail.com", initial_balance=0, account_type="GENERIC"):
-        if not isinstance(initial_balance , (int, float)) or initial_balance<0:
+    def __init__(self, name="John", email="john@gmail.com", initial_balance=0, account_type="GENERIC"):
+        if not isinstance(initial_balance, (int, float)) or initial_balance < 0:
             print("Invalid initial balance!")
             # Set a default valid balance instead of potentially negative
             self.balance = 0
@@ -14,7 +13,8 @@ class BankAccount:
             self.balance = initial_balance
         self.transactions_history = []
         self.account_type = account_type
-        self.user = User(name, email)
+        self.name = name
+        self.email = email
 
     @staticmethod
     def is_valid_account_type(account_type):
@@ -22,7 +22,7 @@ class BankAccount:
         return account_type.upper() in ALLOWED_ACCOUNT_TYPES
 
     def deposit(self, amount):
-        if not isinstance(amount , (int, float)) or amount <= 0:
+        if not isinstance(amount, (int, float)) or amount <= 0:
             print("Deposit amount is invalid!")
             return False
         self.balance += amount
@@ -31,7 +31,7 @@ class BankAccount:
         return True
 
     def withdraw(self, amount):
-        if not isinstance(amount ,(int, float)) or amount <= 0:
+        if not isinstance(amount, (int, float)) or amount <= 0:
             print("Withdrawal amount is invalid!")
             return False
         if self.balance < amount:
@@ -51,8 +51,11 @@ class BankAccount:
     def get_account_type(self):
         return self.account_type
 
-    def get_user(self):
-        return self.user
+    def get_name(self):
+        return self.name
+    
+    def get_email(self):
+        return self.email
 
 
 class SavingsAccount(BankAccount):
@@ -85,7 +88,6 @@ class CurrentAccount(BankAccount):
 
 class StudentAccount(BankAccount):
     def __init__(self, name="John", email="john@gmail.com", initial_balance=0):
-        # Student accounts aren't in the allowed types but keeping for compatibility
         super().__init__(name, email, initial_balance, "STUDENT")
 
     def withdraw(self, amount):
