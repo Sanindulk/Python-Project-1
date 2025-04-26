@@ -11,18 +11,25 @@ class BankAccount:
         self.user = User(name, email)
 
     def deposit(self, amount):
-        if not isinstance(amount , (int, float)) and  amount <= 0:
+        if not isinstance(amount , (int, float)) or amount <= 0:
             print("Deposit amount is invalid!")
+            return False
         self.balance += amount
         self.transactions_history.append(Transaction(amount, "deposit"))
+        print(f"Deposited ${amount:.2f}. New balance: ${self.balance:.2f}")
+        return True
 
     def withdraw(self, amount):
-        if not isinstance(amount ,(int, float))  and amount <= 0:
+        if not isinstance(amount ,(int, float)) or amount <= 0:
             print("Withdrawal amount is invalid!")
-        if self.balance < amount-100:
+            return False
+        if self.balance < amount:
             print("Insufficient Balance!")
-        self.balance += amount
+            return False
+        self.balance -= amount  # Fixed: SUBTRACT the withdrawal amount
         self.transactions_history.append(Transaction(amount, "withdraw"))
+        print(f"Withdrew ${amount:.2f}. New balance: ${self.balance:.2f}")
+        return True
 
     def get_balance(self):
         return self.balance
@@ -41,10 +48,16 @@ class SavingsAccount(BankAccount):
     MIN_BALANCE = 100
 
     def withdraw(self, amount):
+        if not isinstance(amount, (int, float)) or amount <= 0:
+            print("Withdrawal amount is invalid!")
+            return False
         if self.balance - amount < self.MIN_BALANCE:
-            print("")
-            return 
-        super().withdraw(amount)
+            print(f"A minimum balance of Rs.{self.MIN_BALANCE} is required for Savings account!")
+            return False
+        self.balance -= amount
+        self.transactions_history.append(Transaction(amount, "withdraw"))
+        print(f"Withdrew ${amount:.2f}. New balance: ${self.balance:.2f}")
+        return True
 
     def get_account_type(self):
         return "Savings account"
@@ -57,9 +70,16 @@ class CurrentAccount(BankAccount):
 class StudentAccount(BankAccount):
 
     def withdraw(self, amount):
+        if not isinstance(amount, (int, float)) or amount <= 0:
+            print("Withdrawal amount is invalid!")
+            return False
         if (self.balance - amount) < 100:
             print("A minimum balance of Rs.100 needed to withdraw from a Students account!")
-        super().withdraw(amount)
+            return False
+        self.balance -= amount
+        self.transactions_history.append(Transaction(amount, "withdraw"))
+        print(f"Withdrew ${amount:.2f}. New balance: ${self.balance:.2f}")
+        return True
 
     def get_account_type(self):
         return "Students account"
